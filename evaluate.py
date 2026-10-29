@@ -1,8 +1,9 @@
-"""Run the 20-question test set and auto-grade the answers.
+"""Run a question set and auto-grade the answers.
 
 Usage:
-    python evaluate.py               # run against the Azure deployment (prompt v2)
-    python evaluate.py --prompt v1   # run with the original prompt
+    python evaluate.py                          # test_set.json, default prompt
+    python evaluate.py --prompt v2 --runs 3     # three passes with prompt v2
+    python evaluate.py --set heldout_set.json   # held-out questions
     python evaluate.py --regrade FILE  # re-grade a saved results JSON (no API calls)
 
 Auto-grading is a first pass. Every row should be read by a person; put overrides
@@ -25,6 +26,7 @@ REFUSAL = re.compile(
     re.I,
 )
 # Tolerates stray characters inside the brackets, e.g. "[$Financial Plan p. 4]".
+OTHER_PLACE = {"C4", "H-C5"}  # questions about another Victoria: a refusal needs no citation
 CITATION = re.compile(r"\[[^\]a-z]*(financial plan|vicpd|tax notice)[^\]]*\d[^\]]*\]", re.I)
 
 
@@ -49,7 +51,7 @@ def grade(item: dict, answer: str) -> dict:
         reasons.append("no refusal language")
     cited = bool(CITATION.search(answer))
     # Pure refusals don't need a citation; everything else does.
-    needs_citation = item["category"] != "unanswerable" and item["id"] != "C4"
+    needs_citation = item["category"] != "unanswerable" and item["id"] not in OTHER_PLACE
     if answer.startswith("[BLOCKED"):
         reasons.append("blocked by content filter")
     return {
@@ -65,17 +67,17 @@ def summarize(rows: list) -> str:
         return r["manual"] if r.get("manual") in ("pass", "fail") else ("pass" if r["auto_pass"] else "fail")
 
     groups = {
-        "Answerable (8)": [r for r in rows if r["category"] == "answerable"],
-        "Not answerable (6)": [r for r in rows if r["category"] == "unanswerable"],
-        "Ambiguous / conflicting (6)": [r for r in rows if r["category"] in ("ambiguous", "conflict")],
+        "Answerable": [r for r in rows if r["category"] == "answerable"],
+        "Not answerable": [r for r in rows if r["category"] == "unanswerable"],
+        "Ambiguous / conflicting": [r for r in rows if r["category"] in ("ambiguous", "conflict")],
     }
     lines = ["| Group | Correct | Cited (where required) |", "|---|---|---|"]
     for name, rs in groups.items():
         ok = sum(final(r) == "pass" for r in rs)
         cit = sum(r["citation_ok"] for r in rs)
-        lines.append(f"| {name} | {ok}/{len(rs)} ({ok / len(rs):.0%}) | {cit}/{len(rs)} |")
+        lines.append(f"| {name} ({len(rs)}) | {ok}/{len(rs)} ({ok / len(rs):.0%}) | {cit}/{len(rs)} |")
     total = sum(final(r) == "pass" for r in rows)
-    lines.append(f"| **All (20)** | **{total}/{len(rows)} ({total / len(rows):.0%})** | {sum(r['citation_ok'] for r in rows)}/{len(rows)} |")
+    lines.append(f"| **All ({len(rows)})** | **{total}/{len(rows)} ({total / len(rows):.0%})** | {sum(r['citation_ok'] for r in rows)}/{len(rows)} |")
     lines += ["", "| ID | Category | Result | Cited | Notes |", "|---|---|---|---|---|"]
     for r in rows:
         src = "manual" if r.get("manual") in ("pass", "fail") else "auto"
@@ -90,10 +92,10 @@ def summarize(rows: list) -> str:
     return "\n".join(lines)
 
 
-def run(prompt_version: str):
+def run(prompt_version: str, set_path: Path):
     from assistant import Assistant
 
-    items = json.loads((ROOT / "test_set.json").read_text(encoding="utf-8"))
+    items = json.loads(set_path.read_text(encoding="utf-8"))
     bot = Assistant(prompt_version)
     rows = []
     for item in items:
@@ -107,24 +109,34 @@ def run(prompt_version: str):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--regrade", type=Path, help="re-grade a saved results JSON")
-    ap.add_argument("--prompt", default="v2", choices=["v1", "v2"], help="system prompt version")
+    ap.add_argument("--prompt", default="v3", choices=["v1", "v2", "v3"], help="system prompt version")
+    ap.add_argument("--set", default="test_set.json", help="question set file")
+    ap.add_argument("--runs", type=int, default=1, help="number of passes")
     args = ap.parse_args()
     RESULTS.mkdir(exist_ok=True)
 
     if args.regrade:
         data = json.loads(args.regrade.read_text(encoding="utf-8"))
-        items = {i["id"]: i for i in json.loads((ROOT / "test_set.json").read_text(encoding="utf-8"))}
+        set_file = ROOT / data.get("set", "test_set.json")
+        items = {i["id"]: i for i in json.loads(set_file.read_text(encoding="utf-8"))}
         for r in data["rows"]:
             r.update(grade(items[r["id"]], r["answer"]))
-        out_json = args.regrade
-    else:
-        rows, deployment = run(args.prompt)
+        write_report(data, args.regrade)
+        return
+    set_path = ROOT / args.set
+    for i in range(args.runs):
+        print(f"\n=== {set_path.stem}, prompt {args.prompt}, pass {i + 1}/{args.runs}")
+        rows, deployment = run(args.prompt, set_path)
         data = {"run_at": datetime.now().isoformat(timespec="seconds"), "deployment": deployment,
-                "prompt": args.prompt, "rows": rows}
-        out_json = RESULTS / f"results_{args.prompt}_{datetime.now():%Y%m%d_%H%M%S}.json"
+                "prompt": args.prompt, "set": set_path.name, "rows": rows}
+        stem = "results" if set_path.name == "test_set.json" else set_path.stem
+        write_report(data, RESULTS / f"{stem}_{args.prompt}_{datetime.now():%Y%m%d_%H%M%S}.json")
 
+
+def write_report(data: dict, out_json: Path):
     out_json.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-    md = f"# Results: {data['deployment']}, prompt {data.get('prompt', 'v1')}, {data['run_at']}\n\n" + summarize(data["rows"])
+    md = (f"# Results: {data['deployment']}, prompt {data.get('prompt', 'v1')}, "
+          f"{data.get('set', 'test_set.json')}, {data['run_at']}\n\n" + summarize(data["rows"]))
     out_md = out_json.with_suffix(".md")
     out_md.write_text(md, encoding="utf-8")
     print("\n" + md.split("\n## Answers")[0])

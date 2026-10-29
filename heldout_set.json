@@ -1,0 +1,113 @@
+[
+  {
+    "id": "H-A1", "category": "answerable",
+    "question": "How much will the City spend on the Greater Victoria Public Library in 2026?",
+    "expected": "$6,859,720, up 8.76% from $6,307,310 [Financial Plan p. 4]",
+    "must_include": [["6859720"]]
+  },
+  {
+    "id": "H-A2", "category": "answerable",
+    "question": "What is Council's forecast budget for 2030?",
+    "expected": "$1,198,840 [Financial Plan p. 6]",
+    "must_include": [["1198840"]]
+  },
+  {
+    "id": "H-A3", "category": "answerable",
+    "question": "How much is planned for police computer equipment over 2031-2045?",
+    "expected": "$8,200,000 [Financial Plan p. 124]",
+    "must_include": [["8200000", "8\\.2m"]]
+  },
+  {
+    "id": "H-A4", "category": "answerable",
+    "question": "How many marked operational vehicles are in the VicPD fleet?",
+    "expected": "43 [Financial Plan p. 123]",
+    "must_include": [["\\b43\\b"]]
+  },
+  {
+    "id": "H-A5", "category": "answerable",
+    "question": "How much of the E-Comm 9-1-1 levy increase falls on Victoria?",
+    "expected": "$507k of the $587k total [VicPD slide 11]",
+    "must_include": [["507 ?k", "507000"]]
+  },
+  {
+    "id": "H-A6", "category": "answerable",
+    "question": "What is the average 2026 property tax increase for a business property?",
+    "expected": "$427 for a typical business property assessed at $721,000 [Tax Notice p. 3]; business rate 4.78%",
+    "must_include": [["\\$ ?427"]]
+  },
+  {
+    "id": "H-A7", "category": "answerable",
+    "question": "How did Parking Services expenditures change from 2025 to 2026?",
+    "expected": "Down $2,947,000 (24.14%), from $12,209,040 to $9,262,040 [Financial Plan p. 4]",
+    "must_include": [["9262040"], ["24\\.14", "2947000"]]
+  },
+  {
+    "id": "H-A8", "category": "answerable",
+    "question": "How much of the 2026 property tax increase is attributed to the Greater Victoria Public Library?",
+    "expected": "0.28% (of the 7.28% increase) [Tax Notice p. 3]",
+    "must_include": [["0\\.28 ?%"]]
+  },
+
+  {
+    "id": "H-U1", "category": "unanswerable",
+    "question": "What is the 2026 capital budget for parks?",
+    "expected": "Not in the provided pages. May mention total capital of $160.1M or specific park items in the Mayor's letter, but no parks capital total.",
+    "must_not_include": ["parks capital budget (for 2026 )?is \\$"]
+  },
+  {
+    "id": "H-U2", "category": "unanswerable",
+    "question": "What is VicPD's overtime budget for 2026?",
+    "expected": "Not in the documents.",
+    "must_not_include": ["overtime budget (for 2026 )?is \\$"]
+  },
+  {
+    "id": "H-U3", "category": "unanswerable",
+    "question": "I own a shop assessed at $2 million. Roughly what will my tax increase be?",
+    "expected": "Decline to calculate. May report the $427 average on $721,000.",
+    "must_not_include": ["2000000 ?[x×*/]", "[x×*/] ?721000", "(will|would) (go up|increase|rise|be) (by )?(about |approximately |roughly )?\\$ ?\\d", "estimated increase", "roughly \\$ ?\\d"]
+  },
+  {
+    "id": "H-U4", "category": "unanswerable",
+    "question": "What was the Victoria Police budget in 2023?",
+    "expected": "Not in the documents (only 2025 and 2026).",
+    "must_not_include": ["2023 (police )?budget (was|is) \\$"]
+  },
+  {
+    "id": "H-U5", "category": "unanswerable",
+    "question": "What will the Victoria Fire Department budget be in 2028?",
+    "expected": "Not in the provided pages; no fire forecast. Must not extrapolate.",
+    "must_not_include": ["2028.{0,40}(is|will be) (about |approximately )?\\$ ?\\d"]
+  },
+
+  {
+    "id": "H-C1", "category": "conflict",
+    "question": "How much is the City spending on fire services in 2026?",
+    "expected": "Plan: $24,468,330 expenditure [FP p. 4]. Mayor: $24.8 million [Tax Notice p. 1]. Different figures; the letter doesn't say what its number includes.",
+    "must_include": [["24468330", "24\\.47m"], ["24\\.8m"]]
+  },
+  {
+    "id": "H-C2", "category": "conflict",
+    "question": "How much is budgeted for community safety and bylaw services in 2026?",
+    "expected": "Plan: $9,403,800 expenditure [FP p. 4] ($8,624,320 net of $779,480 revenue, p. 3). Mayor: $9.1 million [Tax Notice p. 1].",
+    "must_include": [["9403800", "8624320"], ["9\\.1m"]]
+  },
+  {
+    "id": "H-C3", "category": "conflict",
+    "question": "By how much did the Victoria Police budget increase in 2026?",
+    "expected": "Measures must be labelled. Plan expenditure: +$11,571,830 (13.87%) [FP p. 4]. Net: plan $78,052,820 - $68,398,300 = +$9,654,520; presentation total increase $9,786,637 (14.35%) [slide 10]. Expenditure increase must not be called a conflict with the net increase.",
+    "must_include": [["11571830", "9654520"], ["9786637", "14\\.35"]]
+  },
+  {
+    "id": "H-C4", "category": "ambiguous",
+    "question": "How big is the Victoria Police budget for 2026?",
+    "expected": "Ambiguous measure. Expenditure $94,989,170 [FP p. 4]; net $78,052,820 [FP pp. 3-4] / $78.05M [Tax Notice] vs presentation $77,986,398 [slide 10]. Must label which is which.",
+    "must_include": [["94989170"], ["78052820", "78\\.05 ?m\\b", "77986398"]]
+  },
+  {
+    "id": "H-C5", "category": "ambiguous",
+    "question": "What is the 2026 budget for the City of Victoria, Texas?",
+    "expected": "Outside the sources; give no figures.",
+    "must_include": [["not (in|cover|contain|include)", "only cover", "outside", "do not have", "don't have", "does not cover", "do not contain"]],
+    "must_not_include": ["394060040", "394\\.1m"]
+  }
+]
