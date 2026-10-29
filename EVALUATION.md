@@ -3,7 +3,7 @@
 ## Method
 
 - **Test set:** 20 questions in `test_set.json`: 8 answerable, 6 not answerable, 6 ambiguous or conflicting.
-- **Run:** `python evaluate.py` sends each question once, at temperature 0, with the full corpus in the system prompt.
+- **Run:** `python evaluate.py [--prompt v1|v2]` sends each question once, at temperature 0, with the full corpus in the system prompt.
 - **Auto-grading:** each question lists required figures (`must_include`; every group must match) and forbidden patterns (`must_not_include`). Numbers are normalized first (commas removed, "million" → "m"). Unanswerable questions also need refusal language. Citations are checked separately.
 - **Manual review:** regex grading can't judge whether an answer is *reasoned* correctly. Read every row in `results/*.md`, set `"manual": "pass"|"fail"` plus a `manual_note` in the JSON, then run `python evaluate.py --regrade results/<file>.json`.
 - **Grader check:** before any model run, the grader was tested on 20 hand-written correct answers (all passed) and 7 deliberately wrong ones (all failed).
@@ -40,9 +40,66 @@
 
 **Pattern:** 5 of the 6 failures involve the same behaviour. The model answers from the first source that fits and doesn't cross-check. Rule 5 in the prompt ("report both figures") only fires when the model notices a conflict, and it never goes looking for one. A likely fix is to require an explicit check of all three sources for every figure, or to list the known overlaps in the prompt. That fix hasn't been tested yet.
 
+## Run 2: prompt v2
+
+### What changed
+
+v2 (`SYSTEM_PROMPT_V2` in `assistant.py`; v1 is kept and can be run with `--prompt v1`) targets the run 1 failures:
+
+| Run 1 failure | v2 change |
+|---|---|
+| Never cross-checked sources (C1, C2, C5, C6) | Says up front that the three documents overlap on police and tax figures. Adds a silent step: find the item in all three documents and on both p. 3 and p. 4, then compare. Every answer must end with a `Cross-check:` line. |
+| Read the base-only column (C5) | When a table row has several columns, use Total unless the question asks for base or one-time. |
+| Calculated a personal tax bill (U3) | Hard rule: never calculate, estimate or scale an individual's tax, even when asked directly. Point to the City's tax calculator. |
+| Pseudo-answer before refusing (U1) | Refusals must *start* with the refusal sentence. |
+| Didn't state the BC assumption (C3) | If a question says only "Victoria", start with "Assuming you mean the City of Victoria, British Columbia:". |
+
+v2 was run twice to measure variance. Same model and temperature as run 1.
+
+### Results
+
+| Group | v1 | v2, pass 1 | v2, pass 2 |
+|---|---|---|---|
+| Answerable (8) | 8/8 | 7/8 | 7/8 |
+| Not answerable (6) | 5/6 | 5/6 | **6/6** |
+| Ambiguous / conflicting (6) | 1/6 | 4/6 | 5/6 |
+| — of which conflicts (4) | 0/4 | 2/4 | 3/4 |
+| **All (20)** | **14/20 (70%)** | **16/20 (80%)** | **18/20 (90%)** |
+
+| ID | v1 | v2 p1 | v2 p2 | Notes |
+|---|---|---|---|---|
+| A2 | ✅ | ❌ | ❌ | **New failure caused by v2.** The cross-check compares the plan's police *expenditure* ($94.99M) to the presentation's *net* budget ($77.99M) and reports a "21.8% difference". That's a false conflict between two different measures. |
+| U1 | ✅ | ❌ | ✅ | Pass 1 says "the 2027 forecast is $94,989,170", which is the 2026 figure presented as a forecast. This is the worst error in any run. |
+| U3 | ❌ | ✅ | ✅ | Both passes refuse and point to the tax calculator. Fixed. |
+| C1 | ❌ | ✅ | ✅ | Both report $78,052,820 vs $77,986,398 (gap $66,422). Fixed. |
+| C2 | ❌ | ❌ | ❌ | Still reports 69.5% only. The ~69% figure has to be *derived* from two documents, and the model doesn't do it. |
+| C3 | ❌ | ✅ | ✅ | States the BC assumption. Fixed. |
+| C5 | ❌ | ❌ | ✅ | Both passes get the plan net right. Pass 1 still uses the base-only $68,153,143; pass 2 uses the Total column. |
+| C6 | ❌ | ✅ | ✅ | Both report $384,251,390 and $385,951,390 (gap $1.7M). Citations were written as prose instead of brackets. |
+
+All other questions passed in every run.
+
+### What this shows
+
+- **Explicit cross-checking mostly works.** Stated conflicts (C1, C6) were fixed in both passes. Conflicts that need arithmetic across documents (C2) were not fixed in either.
+- **It also has a cost.** Forcing a cross-check on every answer made the model invent a conflict on A2, a question v1 answered cleanly. A rule that tells the model to look for disagreement makes it find disagreement, including between figures that measure different things.
+- **Run-to-run variance is large.** At temperature 0, the two v2 passes differ on 2 of 20 questions (U1 and C5). One of them is a fabricated forecast. A single run can't be trusted for a change this size.
+- **The results are optimistic.** v2 was written after seeing run 1's failures on these same 20 questions, and its prompt names the areas where the documents overlap. Improvements on a test set the prompt was tuned to don't show how it would do on new questions. A held-out set is needed before claiming v2 is better.
+
+### Recommendation
+
+v2 is better overall: refusals and stated conflicts improve and the tax-advice failure is gone. It's not ready to rely on yet. Next fixes to try:
+
+1. Limit the cross-check to the *same measure* (net vs net, expenditure vs expenditure). Fixes A2.
+2. Give the model the documents' relationships as data, e.g. a small table saying "presentation slide 10 Total = VicPD net". Don't rely on the model to infer them.
+3. Write 10–20 held-out questions before changing the prompt again.
+4. Run each configuration at least 3 times and report the range.
+
 ## Grader corrections after run 1
 
 The first auto-grade had U3 as a **pass**, because the regex didn't match the form the calculation actually took, and A2 as **uncited**, because of the stray `$`. Both patterns are fixed in `test_set.json` and `evaluate.py`, and the auto-grades now match the manual review on all 20 questions. This shows why manual review is part of the method: regex grading alone overstated refusal accuracy at 100%, when the real figure was 83%.
+
+In run 2 the auto-grader overstated v2 again: it scored 18/20 and 19/20, against 16/20 and 18/20 after review. It missed the fabricated forecast in U1 (now caught by a new pattern) and the false conflict in A2 (not caught by any pattern, so that one is recorded as a manual override only). The C2 and C5 failures it did catch.
 
 ## Verified reference figures
 
@@ -88,7 +145,7 @@ Two more figures don't match the plan's lines but aren't in the test set, becaus
 - **Narrow corpus.** About 30 pages of the 124-page plan. Questions about other departments get a refusal, even though the full plan has the answer.
 - **Chart content is missing.** Slide 13 ("VicPD Budget Share of Municipal Expenditures") is a chart with no text layer, and the pie charts on Tax Notice p. 3 survive only as labels and percentages.
 - **Table extraction is fragile.** The slide 10 table came out with columns fused together ("9.51%68,153,143$") and needed a regex fix. Other tables were not checked cell by cell.
-- **Single run per question.** Temperature 0 cuts variance but doesn't remove it. Run several times before drawing conclusions about small differences.
+- **Few runs.** v1 was run once, v2 twice. At temperature 0 the two v2 passes still differed on 2 of 20 questions.
 - **The regex grader is lenient on reasoning.** It checks that the right numbers appear, not that they're labelled correctly. That's why manual review is required.
 - **Small sample.** 20 questions can't support strong statistical claims. Read one failure as one failure, not as a rate.
 - **No adversarial or multi-turn testing.** The bot is single-turn and the test set doesn't include prompt injection.

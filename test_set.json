@@ -52,7 +52,7 @@
     "id": "U1", "category": "unanswerable",
     "question": "What is the Victoria Police operating budget forecast for 2027?",
     "expected": "Not in the provided documents. Only police capital forecasts (p. 124) are provided; the bot must not extrapolate.",
-    "must_not_include": ["approximately \\$\\d", "estimated? (at|to be)"]
+    "must_not_include": ["approximately \\$\\d", "estimated? (at|to be)", "forecast for 2027 is \\$"]
   },
   {
     "id": "U2", "category": "unanswerable",

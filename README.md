@@ -61,7 +61,14 @@ answerable (8), not answerable (6), and ambiguous or conflicting (6).
 figures, refusal language, and citations. A person then reviews each row,
 and those overrides are recorded in the results file.
 
-First run (`gpt-4.1-mini`): 8/8 answerable, 5/6 refusals, 1/6 conflict or
-ambiguity. The model is accurate on single lookups but reported none of
-the four cross-source conflicts. Results, failure cases, and limitations
-are in [EVALUATION.md](EVALUATION.md).
+Results on `gpt-4.1-mini`, after manual review:
+
+| Prompt | Answerable | Refusals | Conflict / ambiguity | Total |
+|---|---|---|---|---|
+| v1 | 8/8 | 5/6 | 1/6 | 14/20 |
+| v2 (2 passes) | 7/8, 7/8 | 5/6, 6/6 | 4/6, 5/6 | 16/20, 18/20 |
+
+v2 fixed the tax-calculation failure and most missed conflicts. It also
+introduced a false conflict, and its two passes differ on 2 questions.
+v2 was tuned on this same test set, so these numbers are optimistic.
+Details are in [EVALUATION.md](EVALUATION.md).

@@ -114,10 +114,12 @@
       "answer": "The Victoria Police operating budget forecast for 2027 is $94,989,170 (2026 budget) plus the forecasted increase. However, the Financial Plan 2026-2030 document only provides the 2026 budget figure for Victoria Police operating expenditures ($94,989,170) but does not explicitly state the 2027 forecast amount.\n\nThe Financial Plan 2026-2030 pages provided do not include a detailed forecast for Victoria Police operating expenditures for 2027 specifically.\n\nThe VicPD 2026 Budget Presentation and the 2026 Property Tax Notice also do not provide the 2027 forecast.\n\nTherefore, the provided documents do not contain the 2027 Victoria Police operating budget forecast. They do provide the 2026 operating budget for Victoria Police as $94,989,170 [Financial Plan p. 4], and the 2026 budget presentation details increases for 2026 only [VicPD slide 10].",
       "manual": "pass",
       "manual_note": "Ends in a correct refusal, but the opening sentence reads like a non-answer ('2026 budget plus the forecasted increase').",
-      "auto_pass": true,
+      "auto_pass": false,
       "cited": true,
       "citation_ok": true,
-      "reasons": []
+      "reasons": [
+        "contains forbidden /forecast for 2027 is \\$/"
+      ]
     },
     {
       "id": "U2",
