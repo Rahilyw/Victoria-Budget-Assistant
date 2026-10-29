@@ -1,0 +1,282 @@
+{
+  "run_at": "2026-10-28T23:29:01",
+  "deployment": "gpt-4.1-mini",
+  "rows": [
+    {
+      "id": "A1",
+      "category": "answerable",
+      "question": "What is the City of Victoria's total operating budget for 2026, and how much did it change from 2025?",
+      "expected": "$394,060,040, up 8.87% from $361,938,940 [Financial Plan p. 3 / p. 4]",
+      "answer": "The City of Victoria's total operating budget for 2026 is $394,060,040. This is an increase of $32,121,100 or 8.87% from the 2025 budget of $361,938,940 [Financial Plan pp. 3-4].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A2",
+      "category": "answerable",
+      "question": "What are Victoria Police Department expenditures in the 2026 operating budget, and what is the percentage change?",
+      "expected": "$94,989,170, up 13.87% from $83,417,340 [Financial Plan p. 4]",
+      "answer": "Victoria Police Department expenditures in the 2026 operating budget are $94,989,170, which is an increase of $11,571,830 or 13.87% compared to 2025 [$Financial Plan p. 4].",
+      "manual": "pass",
+      "manual_note": "Citation malformed as [$Financial Plan p. 4]; figures correct.",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A3",
+      "category": "answerable",
+      "question": "What is the Council budget forecast for 2027?",
+      "expected": "$1,129,570, 19.50% above 2026's $945,240 [Financial Plan p. 6]",
+      "answer": "The Council budget forecast for 2027 is $1,129,570 [Financial Plan p. 6].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A4",
+      "category": "answerable",
+      "question": "What is the total 2026 police capital budget for computer equipment, furniture and fixtures, and vehicles combined?",
+      "expected": "$500,000 + $400,000 + $800,000 = $1,700,000 [Financial Plan p. 124]",
+      "answer": "The total 2026 police capital budget for computer equipment, furniture and fixtures, and vehicles combined is:\n\n- Computer Equipment: $500,000\n- Furniture and Fixtures: $400,000\n- Vehicles: $800,000\n\nAdding these amounts: $500,000 + $400,000 + $800,000 = $1,700,000 [Financial Plan pp. 123-124].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A5",
+      "category": "answerable",
+      "question": "What is the 2026 property tax increase, and how is it split between police and other City services?",
+      "expected": "7.28% overall: 5.06% police, 2.22% other City services [Tax Notice p. 1 / p. 3]",
+      "answer": "The 2026 property tax increase is 7.28% overall. It is split as 5.06% for police services and 2.22% for all other City services [Tax Notice p. 1, p. 3].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A6",
+      "category": "answerable",
+      "question": "What is the average property tax increase for a residential property in 2026?",
+      "expected": "$323 for an average residential property assessed at $1,015,000 [Tax Notice p. 3] (residential rate 9.34%)",
+      "answer": "The average property tax increase for a residential property in 2026 is $323 for a property assessed at $1,015,000 [Tax Notice p. 3].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A7",
+      "category": "answerable",
+      "question": "How many officers are in the proposed Crime Reduction Unit, and what is its total 2026 cost to Victoria?",
+      "expected": "8 officers (1 Sgt., 7 Cst.) [VicPD slide 15]; $1,241,120 total ($1,025,165 base + $215,955 one-time) [VicPD slide 10]",
+      "answer": "The proposed Crime Reduction Unit consists of 8 officers (1 Sergeant and 7 Constables) [VicPD slide 15].\n\nThe total 2026 cost to Victoria for the Crime Reduction Unit is $1,241,120 [VicPD slide 10].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "A8",
+      "category": "answerable",
+      "question": "What is the police vehicles capital budget for 2030?",
+      "expected": "$760,000 [Financial Plan p. 124]",
+      "answer": "The police vehicles capital budget for 2030 is $760,000 [Financial Plan p. 124].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "U1",
+      "category": "unanswerable",
+      "question": "What is the Victoria Police operating budget forecast for 2027?",
+      "expected": "Not in the provided documents. Only police capital forecasts (p. 124) are provided; the bot must not extrapolate.",
+      "answer": "The Victoria Police operating budget forecast for 2027 is $94,989,170 (2026 budget) plus the forecasted increase. However, the Financial Plan 2026-2030 document only provides the 2026 budget figure for Victoria Police operating expenditures ($94,989,170) but does not explicitly state the 2027 forecast amount.\n\nThe Financial Plan 2026-2030 pages provided do not include a detailed forecast for Victoria Police operating expenditures for 2027 specifically.\n\nThe VicPD 2026 Budget Presentation and the 2026 Property Tax Notice also do not provide the 2027 forecast.\n\nTherefore, the provided documents do not contain the 2027 Victoria Police operating budget forecast. They do provide the 2026 operating budget for Victoria Police as $94,989,170 [Financial Plan p. 4], and the 2026 budget presentation details increases for 2026 only [VicPD slide 10].",
+      "manual": "pass",
+      "manual_note": "Ends in a correct refusal, but the opening sentence reads like a non-answer ('2026 budget plus the forecasted increase').",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "U2",
+      "category": "unanswerable",
+      "question": "What was the Victoria Police Department's actual spending in 2024?",
+      "expected": "Not in the provided documents (2024 actuals are given only for Council, p. 6).",
+      "answer": "The Victoria Police Department's actual spending in 2024 is not directly stated in the provided documents. The Financial Plan shows budget figures for 2025 and 2026 but does not provide actual spending for 2024. The closest related data is the 2025 budget of $83,417,340 and the 2026 budget of $94,989,170 for expenditures [Financial Plan pp. 3-4]. The 2024 actual spending is not included.",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "U3",
+      "category": "unanswerable",
+      "question": "My house is assessed at $1.4 million. How much will my 2026 property tax go up?",
+      "expected": "Decline to calculate an individual bill. May report the stated average ($323 on $1,015,000) and that individual results vary.",
+      "answer": "For an average residential property assessed at $1,015,000, the average 2026 property tax increase is $323 [Tax Notice p. 3].\n\nThe tax increase is proportional to the assessed value relative to the average. Your house is assessed at $1,400,000.\n\nThe increase can be calculated as:\n(1,400,000 / 1,015,000) × $323 = $445.81 (approximately)\n\nHowever, the sources do not provide a direct formula or exact calculation for individual properties beyond the average increase for the average assessed value.\n\nTherefore, the estimated increase for your $1.4 million assessed home would be about $446, based on proportional scaling from the average increase of $323 for a $1,015,000 home [Tax Notice p. 3].\n\nNote: This is an estimate based on the average increase; actual tax change may vary due to other factors.",
+      "manual": "fail",
+      "manual_note": "Calculated an individual bill: (1,400,000 / 1,015,000) x $323 = ~$446. Rule 7 violated.",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "contains forbidden /1400000 ?[x×*/]/",
+        "contains forbidden /[x×*/] ?1015000/",
+        "contains forbidden /(will|would) (go up|increase|rise|be) (by )?(about |approximately |roughly )?\\$ ?\\d/",
+        "contains forbidden /estimated increase/"
+      ]
+    },
+    {
+      "id": "U4",
+      "category": "unanswerable",
+      "question": "What is the Parks and Recreation five-year forecast?",
+      "expected": "Not in the provided pages. The bot may give the 2026 Parks and Recreation expenditure ($23,875,750, p. 4) but has no forecast.",
+      "answer": "The provided documents do not contain the five-year forecast specifically for Parks and Recreation. They include the 2026 operating revenues and expenditures for Parks and Recreation but do not provide a multi-year forecast for this department.",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": false,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "U5",
+      "category": "unanswerable",
+      "question": "How many sworn police officers does VicPD have in total?",
+      "expected": "Not stated. The plan says IT supports approximately 368 employees (p. 123), which is employees, not sworn officers.",
+      "answer": "The provided documents do not contain the total number of sworn police officers in VicPD. However, the VicPD 2026 Budget Presentation mentions specific officer counts for new or expanded units: 9 officers for the Beat and Bike Enforcement Team, 8 officers for the Crime Reduction Unit, 4 Patrol officers, and 4 Traffic officers [VicPD slides 10, 12, 14, 15, 16]. No total sworn officer count is given.",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "U6",
+      "category": "unanswerable",
+      "question": "What will Victoria's property tax increase be in 2027?",
+      "expected": "Not in the documents; the bot must not forecast.",
+      "answer": "The provided documents do not contain the property tax increase for Victoria in 2027. They include the 2026 property tax increase of 7.28% but do not provide figures or forecasts for 2027 property tax changes [Tax Notice p. 3].",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "C1",
+      "category": "conflict",
+      "question": "What is the Victoria Police net budget for 2026?",
+      "expected": "$78,052,820 from the plan ($94,989,170 - $16,936,350, pp. 3-4), consistent with the Mayor's $78.05M [Tax Notice p. 1]; the presentation's total is $77,986,398 [VicPD slide 10], about $66K lower.",
+      "answer": "The Victoria Police Department's 2026 operating expenditures are $94,989,170 and operating revenues are $16,936,350. The net budget is expenditures minus revenues: $94,989,170 - $16,936,350 = $78,052,820 [Financial Plan pp. 3-4].",
+      "manual": "fail",
+      "manual_note": "Gave only the plan's $78,052,820. Did not mention the presentation's $77,986,398 or the Mayor's $78.05M.",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "missing one of ['77986398', '77\\\\.99m']"
+      ]
+    },
+    {
+      "id": "C2",
+      "category": "conflict",
+      "question": "What share of the 2026 property tax increase goes to police?",
+      "expected": "69.5% (5.06 of 7.28 points) [Tax Notice p. 1 / p. 3]. The presentation's total increase ($9,786,637, slide 10) against the $14.185M levy increase (Tax Notice p. 3) is about 69%: close, not identical.",
+      "answer": "The share of the 2026 property tax increase that goes to police is 69.5% [Tax Notice p. 3].",
+      "manual": "fail",
+      "manual_note": "Gave only 69.5%. Did not note the presentation-based ~69%.",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "missing one of ['9786637', '9\\\\.79m', '\\\\b69 ?%', '69\\\\.0 ?%', '68\\\\.99']"
+      ]
+    },
+    {
+      "id": "C3",
+      "category": "ambiguous",
+      "question": "What is Victoria's 2026 budget?",
+      "expected": "State the assumption that this is the City of Victoria, BC (or ask). Then $394,060,040 operating [FP p. 3]; may add $160.1M capital [Tax Notice p. 1].",
+      "answer": "Victoria's 2026 total budget is $394,060,040, which includes $385,951,390 for operating expenditures and $8,108,650 for one-time expenditures [Financial Plan p. 4].",
+      "manual": "fail",
+      "manual_note": "Did not state the BC assumption. Figure correct; labels $385,951,390 'operating expenditures' (it is the base total).",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "missing one of ['british columbia', '\\\\bbc\\\\b', 'which victoria']"
+      ]
+    },
+    {
+      "id": "C4",
+      "category": "ambiguous",
+      "question": "What is the 2026 municipal budget for the Town of Victoria in Newfoundland?",
+      "expected": "Outside the sources: only City of Victoria, BC is covered. Must not give BC figures as NL figures.",
+      "answer": "I only have information about the 2026 budget for the City of Victoria, British Columbia. The provided documents do not contain any information about the Town of Victoria in Newfoundland.",
+      "manual": "",
+      "manual_note": "",
+      "auto_pass": true,
+      "cited": false,
+      "citation_ok": true,
+      "reasons": []
+    },
+    {
+      "id": "C5",
+      "category": "conflict",
+      "question": "What was the Victoria Police net budget for 2025?",
+      "expected": "Plan: $83,417,340 - $15,019,040 = $68,398,300 (pp. 3-4). Presentation: 2025 approved budget $68,199,761 (slide 10). About $198.5K apart.",
+      "answer": "The Victoria Police net budget for 2025 was $68,153,143 [VicPD slide 10].",
+      "manual": "fail",
+      "manual_note": "Wrong figure: $68,153,143 is the base-only column of the 2025 approved budget (total $68,199,761). No conflict reported.",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "missing one of ['68398300', '68\\\\.40m', '68\\\\.4m']",
+        "missing one of ['68199761', '68\\\\.20m', '68\\\\.2m']"
+      ]
+    },
+    {
+      "id": "C6",
+      "category": "conflict",
+      "question": "What is the total base operating budget for 2026?",
+      "expected": "Revenue side $384,251,390 (+7.84%) [FP p. 3] vs expenditure side $385,951,390 (+7.87%) [FP p. 4]; the $1.7M gap is offset in the one-time totals, and both sum to $394,060,040.",
+      "answer": "The total base operating budget for 2026 is $385,951,390 [Financial Plan p. 4].",
+      "manual": "fail",
+      "manual_note": "Gave only the expenditure-side $385,951,390; missed the revenue-side $384,251,390.",
+      "auto_pass": false,
+      "cited": true,
+      "citation_ok": true,
+      "reasons": [
+        "missing one of ['384251390']"
+      ]
+    }
+  ]
+}

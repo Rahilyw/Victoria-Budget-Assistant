@@ -1,0 +1,3 @@
+openai>=1.40
+pypdf>=4.0
+python-dotenv>=1.0
