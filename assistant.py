@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-from openai import BadRequestError, OpenAI
+from openai import BadRequestError, OpenAI, RateLimitError
 
 ROOT = Path(__file__).parent
 CORPUS_DIR = ROOT / "corpus"
@@ -132,7 +132,9 @@ def make_client() -> OpenAI:
     base = endpoint.rstrip("/")
     if not base.endswith("/openai/v1"):
         base += "/openai/v1"
-    return OpenAI(base_url=base + "/", api_key=key)
+    # Each request sends the whole corpus, so the deployment's tokens-per-minute
+    # limit is easy to hit. The SDK backs off and honours Retry-After on 429s.
+    return OpenAI(base_url=base + "/", api_key=key, max_retries=8)
 
 
 class Assistant:
@@ -182,7 +184,10 @@ def main():
         q = input("\n> ").strip()
         if not q:
             break
-        print("\n" + bot.ask(q))
+        try:
+            print("\n" + bot.ask(q))
+        except RateLimitError:
+            print("\nRate limit still exceeded after retries. Wait a minute and ask again.")
 
 
 if __name__ == "__main__":
