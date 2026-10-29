@@ -50,25 +50,32 @@ cp .env.example .env        # then fill in endpoint, key, deployment name
 python extract.py           # builds corpus/ (already committed; rerun if PDFs change)
 python assistant.py "What is the Victoria Police net budget for 2026?"
 python assistant.py         # interactive mode
+python assistant.py --prompt v2 "..."   # pick a prompt version (v1, v2, v3; default v3)
 python evaluate.py          # runs the 20-question test set, writes results/
+python evaluate.py --set heldout_set.json --runs 3   # held-out set, 3 passes
 ```
 
 ## Evaluation
 
 The test set (`test_set.json`) has 20 questions in three groups:
 answerable (8), not answerable (6), and ambiguous or conflicting (6).
+A separate held-out set (`heldout_set.json`, 18 questions) was written
+before the last prompt change and never used to tune it.
 `evaluate.py` auto-grades each answer with regex checks on the required
 figures, refusal language, and citations. A person then reviews each row,
 and those overrides are recorded in the results file.
 
 Results on `gpt-4.1-mini`, after manual review:
 
-| Prompt | Answerable | Refusals | Conflict / ambiguity | Total |
-|---|---|---|---|---|
-| v1 | 8/8 | 5/6 | 1/6 | 14/20 |
-| v2 (2 passes) | 7/8, 7/8 | 5/6, 6/6 | 4/6, 5/6 | 16/20, 18/20 |
+| Prompt | Original set (20, tuned on) | Held-out set (18) |
+|---|---|---|
+| v1 | 14 | – |
+| v2 (3 passes) | 16, 18, 17 | 16, 14, 15 |
+| v3 (3 passes) | 19, 18, 18 | 14, 15, 16 |
 
-v2 fixed the tax-calculation failure and most missed conflicts. It also
-introduced a false conflict, and its two passes differ on 2 questions.
-v2 was tuned on this same test set, so these numbers are optimistic.
-Details are in [EVALUATION.md](EVALUATION.md).
+Lookups are reliable: 8/8 on held-out answerable questions in every pass.
+v3 beats v2 only on the questions it was tuned on; on held-out questions
+they tie. Neither meets the 100% refusal target, and v3 twice invented a
+forecast figure. The next step is a code-side check that every number in
+an answer comes from the documents. Details are in
+[EVALUATION.md](EVALUATION.md).
